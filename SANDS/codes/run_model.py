@@ -116,7 +116,7 @@ def train_step(tweet_list, encoded_hashtag_list, indices, Labels, Weights):
         EW_batch = tf.convert_to_tensor(EW[indices].toarray(), dtype=tf.int32)
         labels1, weights1 = compute_majority_class_with_weights(EW_batch, Op2)
         labels2, weights2 = compute_majority_class_with_weights(EW_batch, Op1)
-        mask = tf.cast(tf.greater_equal(tf.reduce_max(EW_batch, axis=-1), model_params['min_degree']), dtype=tf.float32)
+        mask = tf.cast(tf.greater_equal(tf.reduce_sum(EW_batch, axis=-1), model_params['min_degree']), dtype=tf.float32)
         loss_a = cce_soft(labels1, classifier_prediction1, sample_weight=mask*weights1)
         loss_b = cce_soft(labels2, classifier_prediction2, sample_weight=mask*weights2)
         loss_c = cce(tf.convert_to_tensor(Labels), classifier_prediction1, sample_weight=Weights)
